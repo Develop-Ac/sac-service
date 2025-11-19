@@ -5,20 +5,24 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class kanbanRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findFirst() {
-    return this.prisma.sc_kanban.findFirst();
+  async findMany() {
+    return this.prisma.com_kanban.findMany();
+  }
+
+  async findById(id: string) {
+    return this.prisma.com_kanban.findUnique({ where: { id } });
   }
 
   async update(id: string, data: any) {
-    return this.prisma.sc_kanban.update({
+    return this.prisma.com_kanban.update({
       where: { id },
-      data: { data }
+      data
     });
   }
 
   async create(data: any) {
-    return this.prisma.sc_kanban.create({
-      data: { data }
+    return this.prisma.com_kanban.create({
+      data
     });
   }
 }
