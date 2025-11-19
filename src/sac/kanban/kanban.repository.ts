@@ -25,4 +25,7 @@ export class kanbanRepository {
       data
     });
   }
+  async delete(id: string) {
+    return this.prisma.sac_kanban.delete({ where: { id } });
+  }
 }

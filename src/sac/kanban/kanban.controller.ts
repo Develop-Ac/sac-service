@@ -1,5 +1,5 @@
 
-import { Controller, Get, Put, Body, Param } from '@nestjs/common';
+import { Controller, Get, Put, Body, Param, Delete } from '@nestjs/common';
 import { kanbanService } from './kanban.service';
 import { ApiTags, ApiBody, ApiResponse } from '@nestjs/swagger';
 
@@ -83,6 +83,11 @@ export class kanbanController {
   @ApiResponse({ status: 200, description: 'Cria um novo item Kanban', type: KanbanItemDto })
   async createKanban(@Body() data: KanbanItemDto) {
     return await this.service.createKanban(data);
+  }
+
+    @Delete(':id')
+  async deleteKanban(@Param('id') id: string) {
+    return await this.service.deleteKanban(id);
   }
 }
  

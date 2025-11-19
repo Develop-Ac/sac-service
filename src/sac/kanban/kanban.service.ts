@@ -1,9 +1,12 @@
-
 import { Injectable } from '@nestjs/common';
 import { kanbanRepository } from './kanban.repository';
 
 @Injectable()
 export class kanbanService {
+    async deleteKanban(id: string) {
+      await this.repo.delete(id);
+      return { ok: true };
+    }
   constructor(private readonly repo: kanbanRepository) {}
 
   async getKanban() {
