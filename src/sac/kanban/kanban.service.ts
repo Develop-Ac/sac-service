@@ -18,10 +18,12 @@ export class kanbanService {
       finalizado: []
     };
     for (const k of kanbans) {
-      const etapa = (k as any).etapa ?? (k.data && (k.data as any).etapa);
-      if (etapa === 'aguardando_atendimento') result.aguardando_atendimento.push(k);
-      else if (etapa === 'em_analise') result.em_analise.push(k);
-      else if (etapa === 'finalizado') result.finalizado.push(k);
+      // Cria cópia e converte BigInt para string
+      const kCopy = { ...k, createdAt: typeof k.createdAt === 'bigint' ? k.createdAt.toString() : k.createdAt };
+      const etapa = (kCopy as any).etapa ?? (kCopy.data && (kCopy.data as any).etapa);
+      if (etapa === 'aguardando_atendimento') result.aguardando_atendimento.push(kCopy);
+      else if (etapa === 'em_analise') result.em_analise.push(kCopy);
+      else if (etapa === 'finalizado') result.finalizado.push(kCopy);
     }
     return result;
   }
@@ -32,6 +34,10 @@ export class kanbanService {
   }
 
   async createKanban(data: any) {
+    // Converte timestamp para ISO-8601 se necessário
+    if (data.data && typeof data.data === 'string' && /^\d+$/.test(data.data)) {
+      data.data = new Date(Number(data.data)).toISOString();
+    }
     if (data.id) {
       const existing = await this.repo.findById(data.id);
       if (existing) {

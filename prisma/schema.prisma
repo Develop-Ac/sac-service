@@ -353,7 +353,7 @@ model gar_historico_garantias {
 
 model sac_kanban {
   id              String   @id
-  data            DateTime @db.Timestamptz(6)
+  data            DateTime @default(now()) @db.Timestamptz(6)
   tipo            String?
   custo           String?
   title           String?
@@ -367,5 +367,6 @@ model sac_kanban {
   itemReclamado   String?
   dptoResponsavel String?
   etapa           String
-  updatedAt       DateTime @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @db.Timestamptz(6)
 }
+ 
