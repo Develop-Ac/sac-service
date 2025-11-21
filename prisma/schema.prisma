@@ -368,5 +368,6 @@ model sac_kanban {
   dptoResponsavel String?
   etapa           String
   updatedAt       DateTime @updatedAt @db.Timestamptz(6)
+  imagem          String?   // base64 da imagem
 }
  
