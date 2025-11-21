@@ -19,6 +19,7 @@ class KanbanItemDto {
   itemReclamado: string;
   dptoResponsavel: string;
   etapa: 'aguardando_atendimento' | 'em_analise' | 'finalizado';
+  imagem: string;
 }
 
 class UpdateEtapaDto {

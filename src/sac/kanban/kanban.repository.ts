@@ -14,10 +14,26 @@ export class kanbanRepository {
   }
 
   async update(id: string, data: any) {
-    return this.prisma.sac_kanban.update({
-      where: { id },
-      data
-    });
+      return this.prisma.sac_kanban.update({
+        where: { id },
+        data: {
+          data: data.data,
+          tipo: data.tipo,
+          custo: data.custo,
+          title: data.title,
+          venda: data.venda,
+          cliente: data.cliente,
+          solucao: data.solucao,
+          vendedor: data.vendedor,
+          createdAt: data.createdAt,
+          reclamacao: data.reclamacao,
+          dataSolucao: data.dataSolucao,
+          itemReclamado: data.itemReclamado,
+          dptoResponsavel: data.dptoResponsavel,
+          etapa: data.etapa,
+          imagem: data.imagem
+        }
+      });
   } 
 
   async create(data: any) {
