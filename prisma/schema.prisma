@@ -16,6 +16,7 @@ model sis_usuarios {
   setor             String
   est_contagem      est_contagem[]
   est_contagem_logs est_contagem_log[]
+  sis_permissoes    sis_permissoes[]
 }
 
 model com_cotacao {
@@ -270,10 +271,10 @@ model gar_emails {
   bcc_list              Json?
   controle_interno      String?
   nota_interna          String?
-  garantia_id           Int?                    @db.Integer
+  garantia_id           Int?
   created_at            DateTime?               @default(now()) @db.Timestamptz(6)
   gar_email_attachments gar_email_attachments[]
-  gar_garantias         gar_garantias?          @relation(fields: [garantia_id], references: [id], onUpdate: NoAction)
+  gar_garantias         gar_garantias?          @relation(fields: [garantia_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([garantia_id], map: "gar_idx_emails_garantia_id")
   @@index([nota_interna], map: "gar_idx_emails_nota_interna")
@@ -352,22 +353,42 @@ model gar_historico_garantias {
 }
 
 model sac_kanban {
-  id              String   @id
-  data            DateTime @default(now()) @db.Timestamptz(6)
-  tipo            String?
-  custo           String?
-  title           String?
-  venda           String?
-  cliente         String?
-  solucao         String?
-  vendedor        String?
-  createdAt       BigInt
-  reclamacao      String?
-  dataSolucao     String?
-  itemReclamado   String?
-  dptoResponsavel String?
-  etapa           String
-  updatedAt       DateTime @updatedAt @db.Timestamptz(6)
-  imagem          String?   // base64 da imagem
+  id                 String               @id
+  data               DateTime             @db.Timestamptz(6)
+  tipo               String?
+  custo              String?
+  title              String?
+  venda              String?
+  cliente            String?
+  solucao            String?
+  vendedor           String?
+  createdAt          BigInt
+  reclamacao         String?
+  dataSolucao        String?
+  itemReclamado      String?
+  dptoResponsavel    String?
+  etapa              String
+  updatedAt          DateTime             @updatedAt @db.Timestamptz(6)
+  imagem             String?
+  sac_kanban_imagens sac_kanban_imagens[]
 }
- 
+
+model sac_kanban_imagens {
+  id         Int        @id @default(autoincrement())
+  kanban_id  String
+  imagem     String
+  created_at DateTime?  @default(now()) @db.Timestamptz(6)
+  sac_kanban sac_kanban @relation(fields: [kanban_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model sis_permissoes {
+  id           String       @id @default(dbgenerated("gen_random_uuid()")) @db.VarChar(36)
+  usuario_id   String       @db.VarChar(36)
+  modulo       String       @db.VarChar
+  tela         String       @db.VarChar
+  visualizar   Boolean      @default(false)
+  editar       Boolean      @default(false)
+  criar        Boolean      @default(false)
+  deletar      Boolean      @default(false)
+  sis_usuarios sis_usuarios @relation(fields: [usuario_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_usuario")
+}
